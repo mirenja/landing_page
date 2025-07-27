@@ -56,3 +56,4 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME"
+        working-directory: ./terraform-gcp-cloudrun
