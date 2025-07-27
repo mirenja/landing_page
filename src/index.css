@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+
+
+@theme {
+  --color-primary: hsl(197 44% 15%); /* Slightly brighter navy */
+  --color-primary-light: hsl(197 44% 35%); /* Better mid-blue */
+  --color-primary-dark: hsl(197 44% 10%);
+  --color-primary-foreground: hsl(0 0% 100%); /* white */
+  --color-accent-light: hsl(197 44% 45%);
+  --color-accent:hsl(197 44% 35%);
+  --color-background: hsl(0 0% 100%);
+  --color-border: hsl(210 25% 90%);
+  --color-input: hsl(210 25% 95%);
+  --color-accent-DEFAULT: hsl(197 44% 35%); 
+  --color-accent-foreground: hsl(0 0% 100%); /* white */
+
+  --white: hsl(0 0% 100%);
+  --white-soft: hsl(0 0% 98%);
+  --gray-light: hsl(210 20% 95%);
+}
