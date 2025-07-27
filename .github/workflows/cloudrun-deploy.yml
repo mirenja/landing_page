@@ -1,0 +1,54 @@
+name: Cloud Run Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: ${{ secrets.GCP_REGION }}
+  REPO_NAME: ${{ secrets.ARTIFACT_REPO_NAME }}
+  SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set IMAGE_NAME
+        id: image
+        run: |
+          IMAGE_TAG="${{ github.ref_name }}-${{ github.sha }}"
+          echo "IMAGE_NAME=app:$IMAGE_TAG" >> "$GITHUB_ENV"
+          echo "image_name=app:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker $REGION-docker.pkg.dev
+
+      - name: Build Docker image
+        run: |
+          docker build  --platform=linux/amd64 -t $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME .
+      
+      - name: Push Docker image
+        run: |
+          docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Apply Terraform
+        run: |
+          terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME"
