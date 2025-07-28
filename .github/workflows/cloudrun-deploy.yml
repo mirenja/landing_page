@@ -59,6 +59,8 @@ jobs:
     steps:
       - name: Checkout code 
         uses: actions/checkout@v4
+      - name: Dump GitHub Context
+        run: echo '${{ toJSON(github) }}'
       - name: Authenticate to Google Cloud via WIF
         uses: google-github-actions/auth@v1
         with:
