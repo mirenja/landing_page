@@ -53,10 +53,11 @@ jobs:
     steps:
       - name: Checkout code 
         uses: actions/checkout@v4
-      - name: Authenticate to Google Cloud  # 🔐 ADD THIS
+      - name: Authenticate to Google Cloud 
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+          export_environment_variables: true
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
