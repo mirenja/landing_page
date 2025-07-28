@@ -18,7 +18,7 @@ export default function HeroSection() {
       <div className="relative z-10 w-full px-6 text-center max-w-4xl">
         <div className="mb-8">
         <h1 className="text-6xl md:text-8xl font-bold text-primary-foreground tracking-wider">
-              QAELLY!!
+              QAELLY!!!
         </h1>
         <p className="text-lg text-primary-foreground/80 mt-2">  Reliable Networks. Confident Growth. </p>
         </div>
