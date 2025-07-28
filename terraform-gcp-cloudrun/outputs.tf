@@ -1,11 +1,11 @@
 output "service_url" {
   description = "The URL of the deployed Cloud Run service."
-  value       = google_cloud_run_service.qaell_v1_service.status[0].url
+  value       = google_cloud_run_service.service.status[0].url
 }
 
 output "service_name" {
   description = "The name of the Cloud Run service."
-  value       = google_cloud_run_service.qaell_v1_service.name
+  value       = google_cloud_run_service.service.name
 }
 
 
