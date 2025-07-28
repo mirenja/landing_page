@@ -10,6 +10,10 @@ resource "google_project_service" "cloud_run_api" {
   service = "run.googleapis.com"
   disable_on_destroy = false 
 }
+variable "create_repo" {
+  type    = bool
+  default = true
+}
 
 resource "google_project_service" "artifact_registry_api" {
   project = var.project_id
@@ -19,6 +23,7 @@ resource "google_project_service" "artifact_registry_api" {
 
 # artifact repository
 resource "google_artifact_registry_repository" "docker_repo" {
+  count         = var.create_repo ? 1 : 0
   project       = var.project_id
   location      = var.region 
   repository_id = var.artifact_registry_repo_name
