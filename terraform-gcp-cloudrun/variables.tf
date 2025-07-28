@@ -26,6 +26,7 @@ variable "image_name" {
 variable "container_port" {
   description = "The port your application listens on inside the container."
   type        = number
+  default     = 80
 }
 
 variable "min_instances" {
