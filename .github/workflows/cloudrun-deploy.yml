@@ -54,7 +54,7 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: Write backend config
-        run: echo -e "organization = \"${{ secrets.TFC_ORG }}\"\nworkspaces {\n  name = \"${{ secrets.TFC_WORKSPACE }}\"\n}" > backend.hcl
+        run: echo -e "organization = \"${{ secrets.TFC_ORG }}\"\nworkspaces {\n  name = \"${{ secrets.TFC_WORKSPACE }}\"\n}" > terraform-gcp-cloudrun/backend.hcl
       - name: Initialize Terraform
         run: terraform init -backend-config=backend.hcl
         working-directory: ./terraform-gcp-cloudrun 
