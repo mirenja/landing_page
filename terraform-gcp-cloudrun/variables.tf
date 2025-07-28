@@ -32,9 +32,11 @@ variable "container_port" {
 variable "min_instances" {
   description = "The minimum number of container instances for Cloud Run."
   type        = number
+  default     = 2
 }
 
 variable "max_instances" {
   description = "The maximum number of container instances for Cloud Run."
   type        = number
+  default     = 5
 }
