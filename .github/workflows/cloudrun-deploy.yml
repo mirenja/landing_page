@@ -59,11 +59,13 @@ jobs:
       contents: read
     env:
       IMAGE_NAME: ${{ needs.deploy.outputs.image_name }}
+      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      REGION: ${{ secrets.GCP_REGION }}
+      REPO_NAME: ${{ secrets.ARTIFACT_REPO_NAME }}
+      SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
     steps:
       - name: Checkout code 
         uses: actions/checkout@v4
-      - name: Dump GitHub Context
-        run: echo '${{ toJSON(github) }}'
       - name: Authenticate to Google Cloud via WIF
         uses: google-github-actions/auth@v1
         with:
@@ -71,19 +73,30 @@ jobs:
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
       - name: Export access token
+        id: token
         run: |
           echo "GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)" >> $GITHUB_ENV
-
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: Write backend config
-        run: echo -e "organization = \"${{ secrets.TFC_ORG }}\"\nworkspaces {\n  name = \"${{ secrets.TFC_WORKSPACE }}\"\n}" > terraform-gcp-cloudrun/backend.hcl
+        run: |
+          echo -e "organization = \"${{ secrets.TFC_ORG }}\"\nworkspaces {\n  name = \"${{ secrets.TFC_WORKSPACE }}\"\n}" > terraform-gcp-cloudrun/backend.hcl
       - name: Initialize Terraform
         run: terraform init -backend-config=backend.hcl
         working-directory: ./terraform-gcp-cloudrun 
-
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var="create_repo=false" -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80"
+        env:
+          GOOGLE_CLOUD_ACCESS_TOKEN: ${{ env.GOOGLE_OAUTH_ACCESS_TOKEN }}
+          GOOGLE_CLOUD_PROJECT: ${{ env.PROJECT_ID }}
+          GOOGLE_CLOUD_REGION: ${{ env.REGION }}
+        run: terraform apply -auto-approve \
+            -var="create_repo=false" \
+            -var="project_id=$PROJECT_ID" \
+            -var="region=$REGION" \
+            -var="artifact_registry_repo_name=$REPO_NAME" \
+            -var="service_name=$SERVICE_NAME" \
+            -var="image_name=$IMAGE_NAME" \
+            -var="container_port=80"
         working-directory: ./terraform-gcp-cloudrun
