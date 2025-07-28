@@ -75,3 +75,6 @@ resource "google_cloud_run_service_iam_member" "allow_unauthenticated" {
   #Check Cloud Run service is created before attempting to set its IAM policy
   depends_on = [google_cloud_run_service.service]
 }
+terraform {
+  backend "remote" {}
+}
