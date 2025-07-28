@@ -4,5 +4,4 @@ node_modules
 terraform.tfstate
 terraform.tfstate.backup
 prod.tfvars
-
 backend.hcl
