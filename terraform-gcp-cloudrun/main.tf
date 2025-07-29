@@ -1,6 +1,13 @@
 provider "google" {
   project = var.project_id
   region  = var.region
+  credentials = file(var.credentials_file_path)
+}
+
+variable "credentials_file_path" {
+  description = "Path to the Google Cloud credentials file."
+  type        = string
+  sensitive   = true 
 }
 
 # enable the API

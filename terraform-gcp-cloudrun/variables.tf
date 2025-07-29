@@ -40,8 +40,5 @@ variable "max_instances" {
   type        = number
   default     = 5
 }
-variable "credentials_file" {
-  type = string
-}
 
 
