@@ -81,7 +81,10 @@ jobs:
       - name: Write backend config
         run: |
           echo -e "organization = \"${{ secrets.TFC_ORG }}\"\nworkspaces {\n  name = \"${{ secrets.TFC_WORKSPACE }}\"\n}" > terraform-gcp-cloudrun/backend.hcl
-
+      - name: Initialize Terraform
+        run: terraform init -input=false -backend-config=backend.hcl
+        working-directory: ./terraform-gcp-cloudrun
+              
       - name: Terraform Plan
         run: terraform plan -input=false
         env:
