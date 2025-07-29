@@ -40,9 +40,8 @@ variable "max_instances" {
   type        = number
   default     = 5
 }
-
 variable "credentials_file" {
-  description = "Path to GCP credentials JSON file"
-  type        = string
+  type = string
 }
+
 
