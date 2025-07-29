@@ -86,5 +86,5 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
           GOOGLE_CLOUD_PROJECT: ${{ env.PROJECT_ID }}
           GOOGLE_CLOUD_REGION: ${{ env.REGION }}
-        run: terraform apply -input=false tfplan 
+        run: terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="credentials_file=${{ steps.auth.outputs.credentials_file_path }}"
         working-directory: ./terraform-gcp-cloudrun
