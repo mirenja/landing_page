@@ -64,6 +64,7 @@ jobs:
     steps:
       - name: Checkout code 
         uses: actions/checkout@v4
+
       - name: 'Authenticate to Google Cloud'
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
@@ -71,31 +72,28 @@ jobs:
           create_credentials_file: true
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
       - name: Write backend config
         run: |
           echo -e "organization = \"${{ secrets.TFC_ORG }}\"\nworkspaces {\n  name = \"${{ secrets.TFC_WORKSPACE }}\"\n}" > terraform-gcp-cloudrun/backend.hcl
-      - name: Initialize Terraform
-        run: terraform init -backend-config=backend.hcl
+
+      - name: Terraform Plan
+        run: terraform plan -input=false
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
+          GOOGLE_CLOUD_PROJECT: ${{ env.PROJECT_ID }}
+          GOOGLE_CLOUD_REGION: ${{ env.REGION }}
         working-directory: ./terraform-gcp-cloudrun 
+
       - name: Terraform Apply
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
           GOOGLE_CLOUD_PROJECT: ${{ env.PROJECT_ID }}
           GOOGLE_CLOUD_REGION: ${{ env.REGION }}
-        run: |
-          echo "Verifying gcloud authentication with provided credentials..."
-          # Explicitly activate the service account using the generated credentials file
-          gcloud auth activate-service-account \
-            --key-file=${{ steps.auth.outputs.credentials_file_path }} \
-            --project=$PROJECT_ID
-          
-          gcloud auth list --format="json" 
-          gcloud projects describe $PROJECT_ID --format="json"
-          echo "gcloud authentication check complete."
-          
-          terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="credentials_file_path=${{ steps.auth.outputs.credentials_file_path }}" -var="create_repo=false"
+        run: terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="credentials_file_path=${{ steps.auth.outputs.credentials_file_path }}" -var="create_repo=false"
         working-directory: ./terraform-gcp-cloudrun
