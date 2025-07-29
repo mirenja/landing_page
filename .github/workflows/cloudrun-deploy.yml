@@ -10,7 +10,6 @@ env:
   REGION: ${{ secrets.GCP_REGION }}
   REPO_NAME: ${{ secrets.ARTIFACT_REPO_NAME }}
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
-  GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
 
 jobs:
   deploy:
