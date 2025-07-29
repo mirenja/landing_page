@@ -32,13 +32,13 @@ jobs:
           IMAGE_TAG="${{ github.ref_name }}-${{ github.sha }}"
           echo "IMAGE_NAME=app:$IMAGE_TAG" >> "$GITHUB_ENV"
           echo "image_name=app:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
+      - name: 'Authenticate to Google Cloud'
+        id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
           create_credentials_file: true
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
       - name: Inspect OIDC Token
         run: |
           echo "${{ steps.auth.outputs.id_token }}" | jq -R 'split(".") | .[1] | @base64d | fromjson'
@@ -74,8 +74,8 @@ jobs:
         uses: 'google-github-actions/auth@v1'
         with:
           create_credentials_file: true
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
       - name: Export access token
         id: token
         run: |
