@@ -86,8 +86,8 @@ jobs:
         working-directory: ./terraform-gcp-cloudrun
       
       - name: Terraform Validate
-       run: terraform validate
-       working-directory: ./terraform-gcp-cloudrun
+        run: terraform validate
+        working-directory: ./terraform-gcp-cloudrun
 
       - name: Terraform Plan
         run: terraform plan -input=false -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="credentials_file_path=${{ steps.auth.outputs.credentials_file_path }}" -var="create_repo=false"
@@ -108,4 +108,3 @@ jobs:
 
 
 
-        
