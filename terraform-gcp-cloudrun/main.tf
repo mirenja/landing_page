@@ -83,13 +83,6 @@ resource "google_cloud_run_service_iam_member" "allow_unauthenticated" {
 }
 
 terraform {
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "4.57.0"
-    }
-  }
-
   backend "remote" {}
 }
 
