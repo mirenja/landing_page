@@ -88,8 +88,13 @@ jobs:
           GOOGLE_CLOUD_REGION: ${{ env.REGION }}
         run: |
           echo "Verifying gcloud authentication with provided credentials..."
-          gcloud auth list --format="json" # This will show the active credential and its source
-          gcloud projects describe $PROJECT_ID --format="json" # Simple authenticated command
+          # Explicitly activate the service account using the generated credentials file
+          gcloud auth activate-service-account \
+            --key-file=${{ steps.auth.outputs.credentials_file_path }} \
+            --project=$PROJECT_ID
+          
+          gcloud auth list --format="json" 
+          gcloud projects describe $PROJECT_ID --format="json"
           echo "gcloud authentication check complete."
           
           terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="credentials_file_path=${{ steps.auth.outputs.credentials_file_path }}" -var="create_repo=false"
