@@ -36,8 +36,8 @@ jobs:
         uses: 'google-github-actions/auth@v1'
         with:
           create_credentials_file: true
-          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
-          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
       - name: Configure Docker for Artifact Registry
         run: |
           gcloud auth configure-docker $REGION-docker.pkg.dev
@@ -69,8 +69,8 @@ jobs:
         uses: 'google-github-actions/auth@v1'
         with:
           create_credentials_file: true
-          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
-          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
       - name: Export access token
         id: token
         run: |
