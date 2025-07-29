@@ -68,27 +68,13 @@ jobs:
         working-directory: ./terraform-gcp-cloudrun
 
       - name: Terraform Plan
-        run: terraform plan -input=false \
-          -var="project_id=$PROJECT_ID" \
-          -var="region=$REGION" \
-          -var="artifact_registry_repo_name=$REPO_NAME" \
-          -var="service_name=$SERVICE_NAME" \
-          -var="image_name=$IMAGE_NAME" \
-          -var="container_port=80" \
-          -var="create_repo=false"
+        run: terraform plan -input=false -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="create_repo=false"
         working-directory: ./terraform-gcp-cloudrun
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve \
-          -var="project_id=$PROJECT_ID" \
-          -var="region=$REGION" \
-          -var="artifact_registry_repo_name=$REPO_NAME" \
-          -var="service_name=$SERVICE_NAME" \
-          -var="image_name=$IMAGE_NAME" \
-          -var="container_port=80" \
-          -var="create_repo=false"
+        run: terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="create_repo=false"
         working-directory: ./terraform-gcp-cloudrun
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
