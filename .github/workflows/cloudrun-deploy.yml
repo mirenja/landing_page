@@ -104,3 +104,8 @@ jobs:
           GOOGLE_CLOUD_REGION: ${{ env.REGION }}
         run: terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="credentials_file_path=${{ steps.auth.outputs.credentials_file_path }}" -var="create_repo=false"
         working-directory: ./terraform-gcp-cloudrun
+
+
+
+
+        
