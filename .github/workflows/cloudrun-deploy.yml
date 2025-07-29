@@ -64,17 +64,13 @@ jobs:
     steps:
       - name: Checkout code 
         uses: actions/checkout@v4
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
+      - name: 'Authenticate to Google Cloud'
+        id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
           create_credentials_file: true
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
-      - name: Export access token
-        id: token
-        run: |
-          echo "GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)" >> $GITHUB_ENV
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -87,7 +83,6 @@ jobs:
         working-directory: ./terraform-gcp-cloudrun 
       - name: Terraform Apply
         env:
-          GOOGLE_OAUTH_ACCESS_TOKEN: ${{ env.GOOGLE_OAUTH_ACCESS_TOKEN }}
           GOOGLE_CLOUD_PROJECT: ${{ env.PROJECT_ID }}
           GOOGLE_CLOUD_REGION: ${{ env.REGION }}
         run: terraform apply -auto-approve -var="create_repo=false" -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80"
