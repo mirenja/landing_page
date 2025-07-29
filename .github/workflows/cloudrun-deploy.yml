@@ -32,14 +32,13 @@ jobs:
           IMAGE_TAG="${{ github.ref_name }}-${{ github.sha }}"
           echo "IMAGE_NAME=app:$IMAGE_TAG" >> "$GITHUB_ENV"
           echo "image_name=app:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
-
-      - name: Authenticate to Google Cloud via WIF
-        uses: google-github-actions/auth@v1
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
         with:
-         token_format: access_token
-         workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-         service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
-
+          create_credentials_file: true
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
       - name: Configure Docker for Artifact Registry
         run: |
           gcloud auth configure-docker $REGION-docker.pkg.dev
@@ -66,10 +65,11 @@ jobs:
     steps:
       - name: Checkout code 
         uses: actions/checkout@v4
-      - name: Authenticate to Google Cloud via WIF
-        uses: google-github-actions/auth@v1
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
         with:
-          token_format: access_token
+          create_credentials_file: true
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
       - name: Export access token
