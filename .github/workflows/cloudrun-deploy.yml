@@ -72,15 +72,7 @@ jobs:
           create_credentials_file: true
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
-      - name: Debug credentials file path
-        run: |
-          echo "Credential file path: ${{ steps.auth.outputs.credentials_file_path }}"
-          if [ ! -f "${{ steps.auth.outputs.credentials_file_path }}" ]; then
-            echo "❌ Credentials file does not exist!"
-            exit 1
-          fi
-          echo "✅ Credentials file exists."
-          cat "${{ steps.auth.outputs.credentials_file_path }}" | head -n 5
+     
 
 
       - name: Set up Terraform
@@ -114,6 +106,15 @@ jobs:
           create_credentials_file: true
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+      - name: Debug credentials file path
+        run: |
+          echo "Credential file path: ${{ steps.auth-apply.outputs.credentials_file_path }}"
+          if [ ! -f "${{ steps.auth-apply.outputs.credentials_file_path }}" ]; then
+            echo "❌ Credentials file does not exist!"
+            exit 1
+          fi
+          echo "✅ Credentials file exists."
+          cat "${{ steps.auth.outputs.credentials_file_path }}" | head -n 5
 
       - name: Terraform Apply
         env:
