@@ -11,6 +11,7 @@ env:
   REPO_NAME: ${{ secrets.ARTIFACT_REPO_NAME }}
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
   CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
+  ENV: ${{ secrets.ENV }}
 
 jobs:
   deploy:
@@ -87,13 +88,13 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
       - name: Terraform Plan for Kubernetes resources
-        run: terraform plan -input=false -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="create_repo=false"
+        run: terraform plan -input=false -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="create_repo=false" -var="cluster_name=$CLUSTER_NAME" -var="env=$ENV"
         working-directory: ./terraform-gcp-cloudrun
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
       - name: Terraform Apply for Kubernetes resources
-        run: terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="create_repo=false"
+        run: terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="artifact_registry_repo_name=$REPO_NAME" -var="service_name=$SERVICE_NAME" -var="image_name=$IMAGE_NAME" -var="container_port=80" -var="create_repo=false" -var="cluster_name=$CLUSTER_NAME" -var="env=$ENV"
         working-directory: ./terraform-gcp-cloudrun
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
