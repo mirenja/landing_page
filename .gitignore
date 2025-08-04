@@ -6,3 +6,5 @@ terraform.tfstate.backup
 prod.tfvars
 backend.hcl
 gcloud.txt
+vite.txt
+.env

@@ -41,4 +41,19 @@ variable "max_instances" {
   default     = 5
 }
 
+variable "env" {
+  description = "Deployment environment"
+  type        = string
+}
+
+variable "cluster_prefix" {
+  description = "Prefix for cluster names"
+  type        = string
+  default     = "gke"
+}
+
+variable "cluster_name" {
+  description = "Name of the GKE cluster"
+  type        = string
+}
 

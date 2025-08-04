@@ -5,6 +5,10 @@ export default function ContactFormWizard() {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -18,6 +22,35 @@ export default function ContactFormWizard() {
   });
 
   const [touched, setTouched] = useState({});
+  const API_BASE = import.meta.env.VITE_CONTACTFORM_API_URL;
+  
+
+  const handleSubmit = async () => {
+  setIsSubmitting(true);
+  setSubmitError(null);
+
+  try {
+    console.log("API_BASE is", API_BASE);
+    const response = await fetch(`${API_BASE}/api/contact`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with ${response.status}`);
+    }
+
+    setSubmitSuccess(true);
+  } catch (error) {
+    console.error("Submission error:", error);
+    setSubmitError("There was a problem submitting the form. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
@@ -77,8 +110,6 @@ export default function ContactFormWizard() {
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
       <div className="relative max-w-2xl w-full bg-white p-8 shadow-md rounded-lg">
-
-        {/* Back button to homepage */}
         <button
           onClick={() => navigate("/")}
           className="absolute top-4 left-4 text-sm text-blue-600 hover:underline"
@@ -259,12 +290,15 @@ export default function ContactFormWizard() {
                 Back
               </button>
               <button
-                onClick={() => alert("Submitted!")}
+                onClick={handleSubmit}
+                disabled={isSubmitting}
                 className="bg-accent text-accent-foreground hover:bg-accent-light px-4 py-2 rounded"
               >
-                Submit
+                {isSubmitting ? "Submitting..." : "Submit"}
               </button>
             </div>
+              {submitError && <p className="text-sm text-red-600 mt-2">{submitError}</p>}
+              {submitSuccess && <p className="text-sm text-green-600 mt-2">Thanks! We’ve received your info.</p>} 
           </>
         )}
       </div>
