@@ -19,7 +19,7 @@ variable "artifact_registry_repo_name" {
 }
 
 variable "image_name" {
-  description = "The name and tag of the Docker image (e.g., 'qaell-v1:latest')."
+  description = "The name and tag of the Docker image."
   type        = string
 }
 
@@ -41,21 +41,8 @@ variable "max_instances" {
   default     = 5
 }
 
-variable "env" {
-  description = "Deployment environment"
-  type        = string
-  default     = "default"
-}
 
-variable "cluster_prefix" {
-  description = "Prefix for cluster names"
-  type        = string
-  default     = "gke"
-}
 
-variable "cluster_name" {
-  description = "Name of the GKE cluster"
-  type        = string
-  default     = "default-cluster"
-}
+
+
 
