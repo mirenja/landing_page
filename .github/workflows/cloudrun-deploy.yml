@@ -10,8 +10,6 @@ env:
   REGION: ${{ secrets.GCP_REGION }}
   REPO_NAME: ${{ secrets.ARTIFACT_REPO_NAME }}
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
-  CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
-  ENV: ${{ secrets.ENV }}
 
 jobs:
   deploy:
