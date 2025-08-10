@@ -10,6 +10,7 @@ env:
   REGION: ${{ secrets.GCP_REGION }}
   REPO_NAME: ${{ secrets.ARTIFACT_REPO_NAME }}
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
+  VITE_CONTACTFORM_API_URL: ${{ secrets.VITE_CONTACTFORM_API_URL }}
 
 jobs:
   deploy:
@@ -42,7 +43,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build --platform=linux/amd64 -t $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME .
+          docker build --platform=linux/amd64 -t  --build-arg VITE_CONTACTFORM_API_URL=${{ secrets.VITE_CONTACTFORM_API_URL }} $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME .
 
       - name: Push Docker image
         run: |
