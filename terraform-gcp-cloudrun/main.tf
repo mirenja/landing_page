@@ -3,8 +3,6 @@ provider "google" {
   region  = var.region
 }
 
-
-
 # enable the API
 
 resource "google_project_service" "cloud_run_api" {
