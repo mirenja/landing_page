@@ -30,7 +30,7 @@ export default function ContactFormWizard() {
   setSubmitError(null);
 
   try {
-    console.log("API_BASE is", API_BASE);
+    // console.log("API_BASE is", API_BASE);
     const response = await fetch(`${API_BASE}/api/contact`, {
       method: "POST",
       headers: {
@@ -45,7 +45,7 @@ export default function ContactFormWizard() {
 
     setSubmitSuccess(true);
   } catch (error) {
-    console.error("Submission error:", error);
+    // console.error("Submission error:", error);
     setSubmitError("There was a problem submitting the form. Please try again.");
   } finally {
     setIsSubmitting(false);
